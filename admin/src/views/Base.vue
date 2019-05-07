@@ -27,7 +27,7 @@
                                 <i class="iconfont icon-user el-icon-user"></i>
                                 <span>其他设置</span>
                             </template>
-                            <el-menu-item index="3-1" >友链管理</el-menu-item>
+                            <el-menu-item index="3-1">友链管理</el-menu-item>
                             <el-menu-item index="3-2">广告管理</el-menu-item>
                         </el-submenu>
                         <el-submenu index="4">
@@ -63,7 +63,7 @@
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item>个人中心</el-dropdown-item>
                             <el-dropdown-item>修改密码</el-dropdown-item>
-                            <el-dropdown-item>退出登录</el-dropdown-item>
+                            <el-dropdown-item @click="loginout()">退出登录</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                 </div>
@@ -85,10 +85,10 @@ export default {
     },
     methods: {
         handleOpen(key, keyPath) {
-            console.log(key, keyPath)
+            // console.log(key, keyPath)
         },
         handleClose(key, keyPath) {
-            console.log(key, keyPath)
+            // console.log(key, keyPath)
         },
         switchCollapse() {
             this.isCollapse = !this.isCollapse
@@ -101,15 +101,22 @@ export default {
         },
         toKindList() {
 
+        },
+        loginout() {
+            this.$store.dispatch('logout')
+            this.$router.push({
+                path: 'login'
+            })
         }
     }
 }
 </script>
 
 <style lang="stylus" scoped>
-#home-aside{
-    height :auto;
+#home-aside {
+    height: auto;
 }
+
 .icon-user {
     vertical-align: middle;
     margin-right: 8px;
