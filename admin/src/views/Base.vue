@@ -1,7 +1,7 @@
 <template>
 <div class="home">
     <el-container>
-        <el-aside width="auto" id="home-aside">
+        <el-aside width="auto" id="home-aside" :style="styleObj">
             <div class="logo"></div>
             <el-row class="tac">
                 <el-col :span="12">
@@ -80,8 +80,14 @@
 export default {
     data() {
         return {
-            isCollapse: true
-        }
+            isCollapse: true,
+            styleObj:{
+                height:'500px'
+            }
+}
+    },
+    mounted(){
+        this.styleObj.height=window.innerHeight+"px"
     },
     methods: {
         handleOpen(key, keyPath) {
@@ -113,9 +119,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-#home-aside {
-    height: auto;
-}
+
 
 .icon-user {
     vertical-align: middle;

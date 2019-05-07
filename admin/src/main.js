@@ -9,20 +9,20 @@ Vue.config.productionTip = false
 Vue.prototype.axios = axios;
 
 //路由守卫
-router.beforeEach((to, from, next) => {
-  if (to.matched.some(r => r.meta.requireAuth)) {
-    if (store.state.token && store.state.auth) {
-      next()
-    } else {
-      next({
-        path: '/login',
-        query: { redirect: to.fullPath }
-      })
-    }
-  } else {
-    next()
-  }
-})
+// router.beforeEach((to, from, next) => {
+//   if (to.matched.some(r => r.meta.requireAuth)) {
+//     if (store.state.token && store.state.auth) {
+//       next()
+//     } else {
+//       next({
+//         path: '/admin/login',
+//         query: { redirect: to.fullPath }
+//       })
+//     }
+//   } else {
+//     next()
+//   }
+// })
 
 new Vue({
   router,
