@@ -65,7 +65,7 @@ export default {
     },
     methods: {
         toArticle() {
-              this.$router.push({ name: 'post' })
+              this.$router.push({ name: 'padd' })
         },
         handleEdit(index, row) {
             //   console.log(index, row)

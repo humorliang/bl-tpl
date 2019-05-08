@@ -16,8 +16,8 @@
             </el-col>
         </el-form-item>
         <el-form-item label="文章分类" prop="kind">
-            <el-select placeholder="请选择分类" v-model="dataForm.kind">
-                <el-option v-for="(item,index) of dataForm.kind_list" :key="index" :label="item" :value="item"></el-option>
+            <el-select placeholder="请选择分类" v-model="dataForm.kind_id">
+                <el-option v-for="(item,index) of dataForm.kind_list" :key="index" :label="item.term_name" :value="item.term_taxonomy_id"></el-option>
             </el-select>
         </el-form-item>
         <el-form-item label="文章简介" prop="desc">
@@ -32,7 +32,7 @@
     </div>
     <div>
         <!-- 这里的表单要使用引号 -->
-        <el-button type="primary" @click="onSubmit('dataForm')" col="10">发表文章</el-button>
+        <el-button type="primary" @click="onSubmit()" col="10">发表文章</el-button>
         <el-button>取消</el-button>
     </div>
 </div>
@@ -91,10 +91,10 @@ export default {
         return {
             dataForm: {
                 // 选择分类的数据
-                kind_list: '',
+                kind_list: [],
                 title: '',
                 // 保存选择的分类数据
-                kind: '',
+                kind_id: '',
                 desc: '',
                 content: ''
             },
@@ -112,7 +112,7 @@ export default {
                         trigger: 'blur'
                     }
                 ],
-                kind: [{
+                kind_id: [{
                     required: true,
                     message: '请选择分类',
                     trigger: 'change'
@@ -126,10 +126,7 @@ export default {
             // 文件列表
             fileList: [],
             //编辑器
-            articleData: {
-                content: ""
-            },
-            orcontent: '这里填写内容',
+            orcontent: '',
             setting: {
                 selector: 'textarea',
                 // 禁用产品属性状态栏中显示的“ Powered by Tiny ”
@@ -271,23 +268,11 @@ export default {
                 object_resizing: true,
                 // Image
                 imagetools_toolbar: 'rotateleft rotateright | flipv fliph | editimage imageoptions',
-                imagetools_cors_hosts: ['humorliang.top', 'liangcode.cn'],
-                images_upload_url: 'upload',
-                images_upload_base_path: '/some/basepath',
+                imagetools_cors_hosts: ['humorliang.top', 'liangcode.cn', '127.0.0.1'],
+                images_upload_url: '/api/v1/admin/auth/upload/img',
+                images_upload_base_path: '/api/v1/admin/auth/upload/img',
                 images_upload_credentials: true,
                 images_upload_handler(blobInfo, success, failure) {
-                    /* async function uploadPic() {
-                        const formData = new FormData();
-                        // 服务端接收文件的参数名，文件数据，文件名
-                        formData.append('upfile', blobInfo.blob(), blobInfo.filename());
-                        // 图片上传请求
-                        const res = await uploadFile(formData);
-                        if (res.success) {
-                          success(res.data[0].FileUrl);
-                        } else {
-                          failure('上传失败');
-                        } 
-                    } */
                     if (blobInfo.blob().size > self.maxSize) {
                         failure('文件体积过大')
                     }
@@ -300,20 +285,19 @@ export default {
                     function uploadPic() {
                         let formData = new FormData()
                         // 服务端接收文件的参数名，文件数据，文件名
-                        formData.append('upfile', blobInfo.blob(), blobInfo.filename())
+                        formData.append('file', blobInfo.blob(), blobInfo.filename())
                         self.axios({
-                                method: 'POST',
-                                // 这里是你的上传地址
-                                url: 'upload',
-                                data: formData,
-                            })
-                            .then((res) => {
-                                // 这里返回的是你图片的地址
-                                success(res.data.url)
-                            })
-                            .catch(() => {
-                                failure('上传失败')
-                            })
+                            method: 'POST',
+                            // 这里是你的上传地址
+                            url: 'http://127.0.0.1:7080/api/v1/admin/auth/upload/img',
+                            data: formData,
+                        }).then(function (res) {
+                            if (res.code == 0) {
+                                success(res.data.file_url)
+                            } else {
+                                failure("失败：", res.msg)
+                            }
+                        })
                     }
                 },
             },
@@ -331,7 +315,7 @@ export default {
         },
         // 保存文案到本地
         editorKeyDown() {
-            // localStorage.editorContent = this.content;
+            localStorage.editorContent = this.content;
         },
         handleRemove(file, fileList) {
             console.log(file, fileList);
@@ -341,6 +325,28 @@ export default {
         },
         onSubmit(data) {
             console.log('submit!');
+            let _this = this
+            // 表单形式
+            const params = new URLSearchParams();
+            params.append("post_title", this.dataForm.title);
+            params.append("post_excerpt", this.dataForm.desc);
+            params.append("post_content", this.orcontent);
+            params.append("term_id", this.dataForm.kind_id);
+            this.axios.post('/api/v1/admin/auth/post', params).then(
+                function (res) {
+                    if (res.code == 0) {
+                        _this.$message('文章添加成功');
+                        _this.$router.push({
+                            name: 'plist',
+                        })
+                    } else {
+                        _this.$message('文章添加失败');
+                        _this.$router.push({
+                            name: 'plist',
+                        })
+                    }
+                }
+            );
         },
         submitUpload() {}
     },
@@ -354,6 +360,19 @@ export default {
         } catch (error) {
 
         }
+        let _this = this
+        console.log(_this)
+        this.axios.get('/api/v1/admin/auth/terms')
+            .then(function (response) {
+                if (response.code == 0) {
+                    _this.dataForm.kind_list = response.data
+
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
     },
     mounted() {
         tinymce.init({});

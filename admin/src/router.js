@@ -20,19 +20,12 @@ export default new Router({
       name: 'home'
     },
     children: [{
-      path: '',
+      path: '/admin/home',
       name: 'home',
       meta: {
         requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
       },
       component: () => import( /* webpackChunkName: "about" */ './views/Home.vue')
-    }, {
-      path: "login",
-      name: "login",
-      meta: {
-        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
-      },
-      component: () => import( /* webpackChunkName: "about" */ './views/Login.vue')
     }, {
       path: 'post/list',
       name: 'plist',
@@ -73,7 +66,7 @@ export default new Router({
     component: () => import( /* webpackChunkName: "about" */ './views/404.vue')
   },
   {
-    path: "login",
+    path: "/login",
     name: "login",
     component: () => import( /* webpackChunkName: "about" */ './views/Login.vue')
   },

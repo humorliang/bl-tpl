@@ -8,7 +8,7 @@ axios.defaults.timeout = 10000
 axios.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest'
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 axios.defaults.headers.post['Cache-Control'] = 'no-cache'
-axios.defaults.baseURL = "http://localhost:8090"
+axios.defaults.baseURL = "http://127.0.0.1:7080"
 
 // http request 拦截器
 axios.interceptors.request.use(

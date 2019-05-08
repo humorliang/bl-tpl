@@ -81,13 +81,13 @@ export default {
     data() {
         return {
             isCollapse: true,
-            styleObj:{
-                height:'500px'
+            styleObj: {
+                height: '500px'
             }
-}
+        }
     },
-    mounted(){
-        this.styleObj.height=window.innerHeight+"px"
+    mounted() {
+        this.styleObj.height = window.innerHeight + "px"
     },
     methods: {
         handleOpen(key, keyPath) {
@@ -100,13 +100,23 @@ export default {
             this.isCollapse = !this.isCollapse
         },
         toPostList() {
+            this.$router.push({
+                name: 'plist',
 
+            })
         },
         toAddPost() {
-
+            this.$router.push({
+                name: 'padd',
+            })
         },
         toKindList() {
-
+            this.$router.push({
+                name: 'post',
+                params: {
+                    id: id
+                }
+            })
         },
         loginout() {
             this.$store.dispatch('logout')
@@ -119,8 +129,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-
-
 .icon-user {
     vertical-align: middle;
     margin-right: 8px;

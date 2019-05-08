@@ -9,20 +9,17 @@ export const LOGOUT = 'LOGOUT'
 export default new Vuex.Store({
   state: {
     token: null,
-    refreshToken: null,
     auth: false,
   },
   mutations: {
     [LOGOUT] (state) {
       state.token = null
-      state.refreshToken = null
       state.auth = false
     },
     //
     [LOGIN] (state, payload) {
       if (payload && payload.token) {
         state.token = payload.token
-        state.refreshToken = payload.refreshToken
         state.auth = true
       }
     }
