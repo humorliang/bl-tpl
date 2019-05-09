@@ -27,51 +27,19 @@ import Nav from "@/components/Nav.vue";
 export default {
     data() {
         return {
-            navData: [{
-                    name: "首页",
-                    path: "/",
-                    son: []
-                },
-                {
-                    name: "文章分类",
-                    path: "/list",
-                    son: [{
-                            name: "分类1",
-                            path: "/list/kind/1"
-                        },
-                        {
-                            name: "分类2",
-                            path: "/list/kind/2"
-                        },
-                        {
-                            name: "分类3",
-                            path: "/list/kind/3"
-                        }
-                    ]
-                },
-                {
-                    name: "留言",
-                    path: "/levcots",
-                    son: []
-                },
-                {
-                    name: "关于",
-                    path: "/about",
-                    son: []
-                }
-            ],
+            navData: [],
             rightSliderData: {
-                slider_jitang: {
-                    title: "标题一",
-                    content: "这是侧边栏的内容好像有一点low，这个是真的很low,一个苦逼的程序员，其实吧不能说是苦逼，但是呢又不想敲代码，真的么有意思"
+                terms: {
+                    title: "文章分类",
+                    list: []
                 },
-                slider_jiaoliu: {
-                    title: "标题二",
-                    content: "这是侧边栏的内容好像有一点low，这个是真的很low,一个苦逼的程序员，其实吧不能说是苦逼，但是呢又不想敲代码，真的么有意思"
+                notes: {
+                    title: "趣事一则",
+                    content: ""
                 },
-                slider_adv: {
-                    title: "标题三",
-                    content: "这是侧边栏的内容好像有一点low，这个是真的很low,一个苦逼的程序员，其实吧不能说是苦逼，但是呢又不想敲代码，真的么有意思"
+                concat: {
+                    title: "来聊骚",
+                    content: ""
                 }
             }
         }
@@ -80,6 +48,41 @@ export default {
     components: {
         RightSider,
         Nav
+    },
+    created(){
+        let _this=this
+        //获取分类
+        this.axios.get("/api/v1/admin/auth/terms").then(function (res) {
+            // console.log(res);
+            if (res.data.code==0) {
+                _this.rightSliderData.terms.list=res.data.data
+            } else {
+            }
+        })
+        //获取趣事
+        this.axios.get("/api/v1/home/fun").then(function (res) {
+            // console.log(res);
+            if (res.data.code==0) {
+                _this.rightSliderData.notes.content=res.data.data.content
+            } else {
+            }
+        })
+        //联系
+         this.axios.get("/api/v1/home/concat").then(function (res) {
+            // console.log(res);
+            if (res.data.code==0) {
+                _this.rightSliderData.concat.content=res.data.data.content
+            } else {
+            }
+        })
+        //菜单导航
+         this.axios.get("/api/v1/home/navs").then(function (res) {
+            console.log(res);
+            if (res.data.code==0) {
+                _this.navData=res.data.data
+            } else {
+            }
+        })
     }
 };
 </script>

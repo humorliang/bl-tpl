@@ -12,43 +12,7 @@ import Item from '@/components/Item.vue';
 export default {
     data() {
         return {
-            plist: [{
-                id: 1,
-                title: "文章标题一",
-                desc: "这是文章一的描述，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，",
-                author: "三毛",
-                label: {
-                    id: 11,
-                    name: "GO",
-                },
-            }, {
-                id: 2,
-                title: "文章标题二",
-                desc: "这是文章二的描述，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，",
-                author: "三毛",
-                label: {
-                    id: 11,
-                    name: "GO",
-                },
-            }, {
-                id: 3,
-                title: "文章标题二",
-                desc: "这是文章二的描述，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，",
-                author: "三毛",
-                label: {
-                    id: 11,
-                    name: "GO",
-                },
-            }, {
-                id: 4,
-                title: "文章标题二",
-                desc: "这是文章二的描述，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，",
-                author: "三毛",
-                label: {
-                    id: 11,
-                    name: "GO",
-                },
-            }]
+            plist: []
         }
     },
     name: 'home',
@@ -56,13 +20,16 @@ export default {
         Item
     },
     created: function () {
-        this.axios.get('/tag')
-            .then(function (response) {
-                // console.log(response);
+        let _this=this
+        //获取最新文章
+        this.axios.get('/api/v1/home/posts/date')
+            .then(function (res) {
+                if (res.status == 200 && res.data.code == 0) {
+                    _this.plist=res.data.data
+                } else {
+                    
+                }
             })
-            .catch(function (error) {
-                // console.log(error);
-            });
     },
 }
 </script>

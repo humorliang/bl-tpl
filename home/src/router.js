@@ -4,7 +4,7 @@ import Base from './views/Base.vue'
 //导入axios
 import axios from 'axios'
 // 注册全局函数
-axios.defaults.baseURL = "http://localhost:8090"
+axios.defaults.baseURL = "http://127.0.0.1:7080"
 Vue.prototype.axios = axios;
 
 Vue.use(Router)
@@ -30,9 +30,6 @@ export default new Router({
         {
           path: 'about',
           name: 'about',
-          // route level code-splitting
-          // this generates a separate chunk (about.[hash].js) for this route
-          // which is lazy-loaded when the route is visited.
           component: () => import( /* webpackChunkName: "about" */ './views/About.vue')
         },
         {

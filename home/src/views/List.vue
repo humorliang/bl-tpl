@@ -20,41 +20,12 @@ import Item from "@/components/Item.vue";
 export default {
     data() {
         return {
-            plist: [{
-                    id: 1,
-                    title: "文章标题一",
-                    desc: "这是文章一的描述，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，",
-                    author: "三毛",
-                    label:{
-                        id:11,
-                        name:"GO",
-                    },
-                },
-                {
-                    id: 2,
-                    title: "文章标题二",
-                    desc: "这是文章二的描述，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，",
-                    author: "三毛",
-                    label:{
-                        id:11,
-                        name:"GO",
-                    },
-                },
-                {
-                    id: 3,
-                    title: "文章标题二",
-                    desc: "这是文章二的描述，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，这是一大堆的废话，",
-                    author: "三毛",
-                    label:{
-                        id:11,
-                        name:"GO",
-                    },
-                }
-            ],
-            total: 3, //默认数据总数
-            page_size: 2, //每页的数据条数
+            plist: [],
+            total: 0, //默认数据总数
+            page_size: 3, //每页的数据条数
             current_Page: 1, //默认开始页面
-            kind_name:"分类",
+            kind_name: "分类",
+            param_id: 1,
         };
     },
     components: {
@@ -62,11 +33,47 @@ export default {
     },
     created() {
         var id = this.$route.params.kind_id
-        console.log(id)
+        // console.log(id)　/api/v1/home/posts/term/
+        this.param_id = id
+        let _this = this
+        //获取最新文章
+        this.axios({
+            method: 'get',
+            url: "/api/v1/home/posts/term/" + id,
+            params: {
+                page_num: _this.current_Page,
+                page_size: _this.page_size,
+            }
+        }).then(function (res) {
+            if (res.status == 200 && res.data.code == 0) {
+                _this.plist = res.data.data.posts
+                _this.kind_name = res.data.data.posts[0].term_name
+                _this.total = res.data.data.total
+            } else {
+
+            }
+        })
     },
     methods: {
-        currentPage: function (page) {
-            console.log(page);
+        currentPage: function (currentPage) {
+            this.current_Page = currentPage
+            let _this = this
+            //获取最新文章
+            this.axios({
+                method: 'get',
+                url: "/api/v1/home/posts/term/" + _this.param_id,
+                params: {
+                    page_num: _this.current_Page,
+                    page_size: _this.page_size,
+                }
+            }).then(function (res) {
+                if (res.status == 200 && res.data.code == 0) {
+                    _this.plist = res.data.data.posts
+                    _this.total = res.data.data.total
+                } else {
+
+                }
+            })
         }
     }
 };

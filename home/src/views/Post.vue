@@ -1,13 +1,16 @@
 <template>
 <div id="post">
-    <div id="post-content" style="text-align:center;margin:0 10px;">
-        <Card>
-            <div style="border-bottom:1px solid #ccc;">
-                <h2>文章标题</h2>
-                <p>作者：<span style="color:green; padding-right:20px;">三毛</span>时间：<span style="color:green;">2017-10-02</span></p>
+    <div id="post-content" style="margin:0 10px;">
+        <Card v-if="JSON.stringify(pdata)!='{}'">
+            <div style="border-bottom:1px solid #ccc;text-align:center;">
+                <h2>{{pdata.post_title}}</h2>
+                <p>作者：<span style="color:green; padding-right:20px;">{{pdata.user_nickname}}</span>
+                    时间：<span style="color:green;">{{pdata.post_date}}</span></p>
             </div>
-            <p>Content of no border type. Content of no border type. Content of no border type. Content of no border type. </p>
+             <div v-html="pdata.post_content" style="padding:20px">
+          </div>
         </Card>
+        <Card v-else>文章内容不见了（⊙ｏ⊙）</Card>
     </div>
 </div>
 </template>
@@ -16,34 +19,27 @@
 export default {
     data() {
         return {
-            pdata:{
-                title:"",
-                author:"",
-                pub_data:"",
-                content:"",
+            pdata: {
             }
         }
     },
     name: "post",
     created() {
         // console.log(this.$route.params.id) //{id: 37}
+        
         var id = this.$route.params.id
-        /*  let _this = this
-         this.axios
-             .get('http://humorliang.top:5000/api/v_1.0/post/', {
-                 params: {
-                     post_id: id
-                 }
-             })
-             .then(function (response) {
-                 _this.postdata = JSON.parse(response.data)
-                 // console.log(response.data)
-             })
-             .catch(function (err) {
-                 console.log(err.data)
-             }) */
-        console.log(id)
-        console.log(this)
+        let _this = this
+        this.axios
+            .get('/api/v1/admin/auth/post/' + id)
+            .then(function (res) {
+                // console.log(res)
+                if (res.status == 200 && res.data.code == 0) {
+                    // console.log(res.data.data)
+                    _this.pdata = res.data.data
+                } else {
+
+                }
+            })
     },
 }
 </script>

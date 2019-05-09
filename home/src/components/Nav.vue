@@ -15,10 +15,10 @@
     关于
     </MenuItem> -->
     <div v-for="(item,index) of navData" :key="index">
-        <MenuItem :name="index+1" :to="item.path" v-if="item.son.length==0">
+        <MenuItem :name="index+1" :to="item.path" v-if="item.son==undefined">
         {{item.name}}
         </MenuItem>
-        <div v-if="item.son.length!=0">
+        <div v-if="item.son!=undefined">
             <Submenu :name="index+1">
                 <template slot="title">{{item.name}}</template>
                 <MenuItem :name="index+1+'-'+sindex" v-for="(sitem,sindex) of item.son" :key="index+1+'-'+sindex" :to="sitem.path">{{sitem.name}}</MenuItem>
