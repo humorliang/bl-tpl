@@ -34,7 +34,6 @@ export default {
             this.axios
                 .post("/api/v1/admin/login",params)
                 .then(function (res) {
-                    console.log(res);
                     if (res.code == 0) {
                         _this.$store.dispatch("logined", {
                             token: res.data.token,

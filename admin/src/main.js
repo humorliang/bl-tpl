@@ -11,7 +11,10 @@ Vue.prototype.axios = axios;
 // 路由守卫
 router.beforeEach((to, from, next) => {
   if (to.matched.some(r => r.meta.requireAuth)) {
-    if (store.state.token && store.state.auth) {
+    const token=store.state.token ? store.state.token: window.sessionStorage.getItem("token")
+    const auth=store.state.auth ? store.state.auth: window.sessionStorage.getItem("auth")
+
+    if (token && auth) {
       next()
     } else {
       next({
