@@ -27,6 +27,16 @@ export default new Router({
       },
       component: () => import( /* webpackChunkName: "about" */ './views/Home.vue')
     }, {
+      path: 'term/list',
+      name: 'terms',
+      meta: {
+        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+      },
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import( /* webpackChunkName: "about" */ './views/Terms.vue')
+    }, {
       path: 'post/list',
       name: 'plist',
       meta: {

@@ -1,11 +1,11 @@
 <template>
 <div class="home">
     <el-container>
-        <el-aside width="auto" id="home-aside" :style="styleObj">
+        <el-aside width="auto" id="home-aside">
             <div class="logo"></div>
             <el-row class="tac">
                 <el-col :span="12">
-                    <el-menu default-active="2" class="el-menu-vertical-demo" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" :collapse="isCollapse">
+                    <el-menu default-active="2" class="el-menu-vertical-demo" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" :collapse="!isCollapse">
                         <el-submenu index="1">
                             <template slot="title">
                                 <i class="el-icon-setting"></i>
@@ -81,28 +81,15 @@ export default {
     data() {
         return {
             isCollapse: true,
-            styleObj: {
-                height: '500px'
-            }
         }
     },
-    mounted() {
-        this.styleObj.height = window.innerHeight + "px"
-    },
     methods: {
-        handleOpen(key, keyPath) {
-            // console.log(key, keyPath)
-        },
-        handleClose(key, keyPath) {
-            // console.log(key, keyPath)
-        },
         switchCollapse() {
             this.isCollapse = !this.isCollapse
         },
         toPostList() {
             this.$router.push({
                 name: 'plist',
-
             })
         },
         toAddPost() {
@@ -112,10 +99,7 @@ export default {
         },
         toKindList() {
             this.$router.push({
-                name: 'post',
-                params: {
-                    id: id
-                }
+                name: 'terms',
             })
         },
         loginout() {
@@ -129,6 +113,10 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.home {
+    height 100%
+}
+
 .icon-user {
     vertical-align: middle;
     margin-right: 8px;

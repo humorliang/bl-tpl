@@ -303,6 +303,29 @@ export default {
             },
         };
     },
+    created() {
+        // 组件初始化时清空content
+        // localStorage.richContent = '';
+        // 如果是修改产品，则orcontent有初始值
+        try {
+            const product = JSON.parse(localStorage.product);
+            this.orcontent = product.DescriptionContent;
+        } catch (error) {
+
+        }
+        let _this = this
+        console.log(_this)
+        this.axios.get('/api/v1/admin/auth/terms/post')
+            .then(function (response) {
+                if (response.code == 0) {
+                    _this.dataForm.kind_list = response.data
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+    },
     watch: {
         orcontent(newVal) {
             localStorage.richContent = newVal;
@@ -334,13 +357,14 @@ export default {
             params.append("term_id", this.dataForm.kind_id);
             this.axios.post('/api/v1/admin/auth/post', params).then(
                 function (res) {
-                    if (res.code == 0) {
+                    console.log(res);
+                    if (res.data.code == 0) {
                         _this.$message('文章添加成功');
                         _this.$router.push({
                             name: 'plist',
                         })
                     } else {
-                        _this.$message('文章添加失败');
+                        _this.$message(res.data.msg);
                         _this.$router.push({
                             name: 'plist',
                         })
@@ -350,30 +374,7 @@ export default {
         },
         submitUpload() {}
     },
-    created() {
-        // 组件初始化时清空content
-        // localStorage.richContent = '';
-        // 如果是修改产品，则orcontent有初始值
-        try {
-            const product = JSON.parse(localStorage.product);
-            this.orcontent = product.DescriptionContent;
-        } catch (error) {
 
-        }
-        let _this = this
-        console.log(_this)
-        this.axios.get('/api/v1/admin/auth/terms')
-            .then(function (response) {
-                if (response.code == 0) {
-                    _this.dataForm.kind_list = response.data
-
-                }
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-
-    },
     mounted() {
         tinymce.init({});
         // document.body.appendChild(this.$el);
