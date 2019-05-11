@@ -56,7 +56,7 @@ export default {
     created() {
         let _this = this
         //获取分类
-        this.axios.get("/api/v1/admin/auth/terms").then(function (res) {
+        this.axios.get("/api/v1/admin/auth/terms/post").then(function (res) {
             // console.log(res);
             if (res.data.code == 0) {
                 _this.rightSliderData.terms.list = res.data.data
